@@ -98,10 +98,22 @@
       Todo: <span id="todo-count">1</span> •
       Done: <span id="completed-count">0</span> •
       Total: <span id="total-count">1</span>
+      <div class="footer">
+      <a href="#" id="clean-up">Clean up</a>
+</div>
     </div>
   </div>
 
   <script>
+
+  function toggleDone() {
+    var checkbox = this;
+
+    $(checkbox).parent().toggleClass("completed");
+    updateCounters()
+
+  }
+
   	$("#total-count").html($(".todo").length);
 
     function updateCounters() {
@@ -111,21 +123,12 @@
   $("#total-count").html(todoCount);
   $("#completed-count").html(completedCount);
   $("#todo-count").html(todoCount - completedCount);
+
 }
-
-
-
-function toggleDone() {
-  var checkbox = this;
-
-  $(checkbox).parent().toggleClass("completed");
-}
-
-
 
 $(document).ready(function() {
   $("input[type=checkbox]").on('change', toggleDone);
-  updateCounters();
+  updateCounters(); // Just add this line
 });
 
 $("form").on('submit', submitTodo);
@@ -171,9 +174,14 @@ function submitTodo(event) {
   function nextTodoId() {
     return $(".todo").length + 1;
   }
-
-
 }
+
+function cleanUpDoneTodos(event) {
+  event.preventDefault();
+  $.when($(".completed").remove())
+    .then(updateCounters);
+}
+$("#clean-up").on('click', cleanUpDoneTodos);
 
   </script>
 </body>
